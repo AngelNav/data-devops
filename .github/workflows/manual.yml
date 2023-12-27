@@ -11,7 +11,7 @@ on:
         required: true
 
 env:
-  ACCESS_TOKEN: ${{ secrets.ACCESS_TOKEN }}
+  PAT_TOKEN: ${{ secrets.PAT_TOKEN }}
   
 jobs:
   create-repo:
@@ -37,7 +37,7 @@ jobs:
           TEMPLATE_REPO=${{ github.event.inputs.template_name }}
 
           # Sign in to GitHub CLI with access token
-          gh auth login --with-token <<<"$ACCESS_TOKEN"
+          gh auth login --with-token <<<"$PAT_TOKEN"
 
           # Clone template
           gh repo clone $ORG_NAME/$TEMPLATE_REPO temp-repo
