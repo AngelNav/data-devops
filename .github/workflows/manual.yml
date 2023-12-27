@@ -1,0 +1,48 @@
+name: Create Data Engineering Repository
+
+on:
+  workflow_dispatch:
+    inputs:
+      repo_name:
+        description: 'Name of repository to create'
+        required: true
+      template_name:
+        description: 'Template repository name'
+        required: true
+
+env:
+  ACCESS_TOKEN: ${{ secrets.ACCESS_TOKEN }}
+  
+jobs:
+  create-repo:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v2
+
+      - name: Set up GitHub CLI
+        run: |
+          sudo apt-key adv --keyserver keyserver.ubuntu.com --recv-key C99B11DEB97541F0
+          sudo apt-add-repository -y https://cli.github.com/packages
+          sudo apt-get update
+          sudo apt-get install gh
+
+      - name: Create Data Engineering Repository
+        run: |
+          # Variables
+          ORG_NAME="AngelNav"
+          REPO_NAME=${{ github.event.inputs.repo_name }}
+          TEMPLATE_REPO=${{ github.event.inputs.template_name }}
+
+          # Sign in to GitHub CLI with access token
+          gh auth login --with-token <<<"$ACCESS_TOKEN"
+
+          # Clone template
+          gh repo clone $ORG_NAME/$TEMPLATE_REPO temp-repo
+
+          # Create a new repository from the template
+          gh repo create $ORG_NAME/$REPO_NAME --private --template $ORG_NAME/$TEMPLATE_REPO
+
+          # Cleanup: Delete the cloned temporary repository
+          rm -rf temp-repo
