@@ -39,11 +39,5 @@ jobs:
           # Sign in to GitHub CLI with access token
           gh auth login --with-token <<<"$PAT_TOKEN"
 
-          # Clone template
-          gh repo clone $ORG_NAME/$TEMPLATE_REPO temp-repo
-
           # Create a new repository from the template
           gh repo create $ORG_NAME/$REPO_NAME --private --template $ORG_NAME/$TEMPLATE_REPO
-
-          # Cleanup: Delete the cloned temporary repository
-          rm -rf temp-repo
