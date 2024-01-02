@@ -30,16 +30,16 @@ jobs:
       - name: Create Repositories
         run: |
           ORG_NAME="MGMResorts"
-      
+
+          # Sign in to GitHub CLI with access token
+          gh auth login --with-token <<<"$PAT_TOKEN"
+          
           # Parse JSON and create repositories
-          for repo in $(jq -c '.repos[]' <<< "${CONFIG_PATH}"); do
-            REPO_NAME=$(echo $repo | jq -r '.repo_name')
-            TEMPLATE_REPO=$(echo $repo | jq -r '.template_name')
-      
-            # Sign in to GitHub CLI with access token
-            gh auth login --with-token <<<"$PAT_TOKEN"
-      
-            # Create a new repository from the template
-            gh repo create "${ORG_NAME}/${REPO_NAME}" --private --template "${ORG_NAME}/${TEMPLATE_REPO}"
+          for repo in $(echo "$CONFIG_PATH" | jq -c '.repos[]'); do
+              REPO_NAME=$(echo $repo | jq -r '.repo_name')
+              TEMPLATE_REPO=$(echo $repo | jq -r '.template_name')
+
+              # Create a new repository from the template
+              gh repo create "${ORG_NAME}/${REPO_NAME}" --private --template "${ORG_NAME}/${TEMPLATE_REPO}"
           done
 
