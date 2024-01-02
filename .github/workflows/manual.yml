@@ -27,6 +27,14 @@ jobs:
           sudo apt-get update
           sudo apt-get install -y gh
 
+      - name: Install jq 1.6
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y wget
+          wget https://github.com/stedolan/jq/releases/download/jq-1.6/jq-linux64 -O jq
+          chmod +x jq
+          sudo mv jq /usr/bin/jq
+
       - name: Create Repositories
         run: |
           ORG_NAME="MGMResorts"
@@ -34,11 +42,12 @@ jobs:
           # Sign in to GitHub CLI with access token
           gh auth login --with-token <<<"$PAT_TOKEN"
           
-          while IFS= read -r repo; do
-              REPO_NAME=$(echo "$repo" | jq -r '.repo_name')
-              TEMPLATE_REPO=$(echo "$repo" | jq -r '.template_name')
-
-              # Create a new repository from the template
-              gh repo create "${ORG_NAME}/${REPO_NAME}" --private --template "${ORG_NAME}/${TEMPLATE_REPO}"
-          done < "$CONFIG_PATH"
+          # Parse JSON and create repositories
+          for repo in $(echo "$CONFIG_CONTENT" | jq -c '.repos[]'); do
+            REPO_NAME=$(echo $repo | jq -r '.repo_name')
+            TEMPLATE_REPO=$(echo $repo | jq -r '.template_name')
+      
+            # Create a new repository from the template
+            gh repo create "${ORG_NAME}/${REPO_NAME}" --private --template "${ORG_NAME}/${TEMPLATE_REPO}"
+          done
 
