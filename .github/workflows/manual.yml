@@ -34,12 +34,11 @@ jobs:
           # Sign in to GitHub CLI with access token
           gh auth login --with-token <<<"$PAT_TOKEN"
           
-          # Parse JSON and create repositories
-          for repo in $(echo "$CONFIG_PATH" | jq -c '.repos[]'); do
-              REPO_NAME=$(echo $repo | jq -r '.repo_name')
-              TEMPLATE_REPO=$(echo $repo | jq -r '.template_name')
+          while IFS= read -r repo; do
+              REPO_NAME=$(echo "$repo" | jq -r '.repo_name')
+              TEMPLATE_REPO=$(echo "$repo" | jq -r '.template_name')
 
               # Create a new repository from the template
               gh repo create "${ORG_NAME}/${REPO_NAME}" --private --template "${ORG_NAME}/${TEMPLATE_REPO}"
-          done
+          done < "$CONFIG_PATH"
 
