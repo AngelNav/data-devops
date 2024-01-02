@@ -30,7 +30,8 @@ jobs:
         id: load-config
         run: |
           CONFIG_PATH="${{ github.event.inputs.config_path }}"
-          echo "CONFIG_CONTENT=$(cat $CONFIG_PATH)" >> $GITHUB_ENV
+          CONFIG_CONTENT=$(cat $CONFIG_PATH)
+          echo "CONFIG_CONTENT=$CONFIG_CONTENT" >> $GITHUB_ENV
 
       - name: Create Repositories
         run: |
