@@ -9,6 +9,7 @@ on:
 
 env:
   PAT_TOKEN: ${{ secrets.PAT_TOKEN }}
+  CONFIG_PATH: ${{ github.event.inputs.config_path }}
 
 jobs:
   create-repos:
@@ -26,25 +27,19 @@ jobs:
           sudo apt-get update
           sudo apt-get install -y gh
 
-      - name: Load Configuration
-        id: load-config
-        run: |
-          CONFIG_PATH="${{ github.event.inputs.config_path }}"
-          CONFIG_CONTENT=$(cat $CONFIG_PATH)
-          echo "CONFIG_CONTENT=$CONFIG_CONTENT" >> $GITHUB_ENV
-
       - name: Create Repositories
         run: |
           ORG_NAME="MGMResorts"
-          
+      
           # Parse JSON and create repositories
-          for repo in $(jq -c '.repos[]' <<< "${CONFIG_CONTENT}"); do
+          for repo in $(jq -c '.repos[]' <<< "${CONFIG_PATH}"); do
             REPO_NAME=$(echo $repo | jq -r '.repo_name')
             TEMPLATE_REPO=$(echo $repo | jq -r '.template_name')
-
+      
             # Sign in to GitHub CLI with access token
             gh auth login --with-token <<<"$PAT_TOKEN"
-
+      
             # Create a new repository from the template
             gh repo create "${ORG_NAME}/${REPO_NAME}" --private --template "${ORG_NAME}/${TEMPLATE_REPO}"
           done
+
