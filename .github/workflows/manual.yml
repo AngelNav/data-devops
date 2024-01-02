@@ -28,15 +28,16 @@ jobs:
 
       - name: Load Configuration
         id: load-config
-        run: echo "::set-output name=config::$(cat ${{ github.event.inputs.config_path }})"
+        run: |
+          CONFIG_PATH="${{ github.event.inputs.config_path }}"
+          echo "CONFIG_CONTENT=$(cat $CONFIG_PATH)" >> $GITHUB_ENV
 
       - name: Create Repositories
         run: |
-          CONFIG_PATH="${{ github.event.inputs.config_path }}"
           ORG_NAME="MGMResorts"
           
           # Parse JSON and create repositories
-          for repo in $(jq -c '.repos[]' <<< "${{ steps.load-config.outputs.config }}"); do
+          for repo in $(jq -c '.repos[]' <<< "${CONFIG_CONTENT}"); do
             REPO_NAME=$(echo $repo | jq -r '.repo_name')
             TEMPLATE_REPO=$(echo $repo | jq -r '.template_name')
 
