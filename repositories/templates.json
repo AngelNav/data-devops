@@ -1,0 +1,12 @@
+{
+  "repos": [
+    {
+      "repo_name": "repo1",
+      "template_name": "template1"
+    },
+    {
+      "repo_name": "repo2",
+      "template_name": "template2"
+    }
+  ]
+}
