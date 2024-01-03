@@ -5,6 +5,7 @@ on:
     workflows: ["Trigger Create Repositories"]
     types:
       - manual
+  workflow_dispatch:
 
 env:
   PAT_TOKEN: ${{ secrets.PAT_TOKEN }}
