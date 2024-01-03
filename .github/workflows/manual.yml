@@ -48,10 +48,12 @@ jobs:
           # Parse JSON and create repositories
           jq -r '.repos[] | "\(.repo_name),\(.template_name)"' "$CONFIG_PATH" |
           while IFS=, read -r repo_name template; do
-            repo_name=$(echo "$repo_name" | tr -d '[:space:]')  # Eliminar espacios en blanco
-            template=$(echo "$template" | tr -d '[:space:]')  # Eliminar espacios en blanco
-      
-            echo "Processing repo: $repo_name - Template: $template"
-            # Create a new repository from the template
-            gh repo create "$ORG_NAME/$repo_name" --private --template "$ORG_NAME/$template"
+            if gh repo view "${ORG_NAME}/$repo_name" &> /dev/null; then
+              echo "Repository ${ORG_NAME}/$repo_name already exists. Skipping creation."
+            else
+              echo "Processing repo: $repo_name - Template: $template"
+              # Create a new repository from the template
+              gh repo create "${ORG_NAME}/$repo_name" --private --template "${ORG_NAME}/$template"
+            fi
+          done
           done
