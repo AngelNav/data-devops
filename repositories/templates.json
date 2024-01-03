@@ -2,11 +2,11 @@
   "repos": [
     {
       "repo_name": "repo1",
-      "template_name": "template1"
+      "template_name": "template_repo"
     },
     {
       "repo_name": "repo2",
-      "template_name": "template2"
+      "template_name": "template_repo"
     }
   ]
 }
