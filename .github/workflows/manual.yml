@@ -37,23 +37,24 @@ jobs:
 
       - name: Create Repositories
         run: |
-          set -x
           ORG_NAME="AngelNav"
-
+          
           # Sign in to GitHub CLI with access token
           gh auth login --with-token <<<"$PAT_TOKEN"
           
+          # Debug print
+          echo "CONFIG_PATH: $CONFIG_PATH"
+          
           # Parse JSON and create repositories
-          for repo in $(echo "$CONFIG_CONTENT" | jq -c '.repos[]'); do
-              echo "Processing repo: $repo"
-              REPO_NAME=$(echo $repo | jq -r '.repo_name')
-              TEMPLATE_REPO=$(echo $repo | jq -r '.template_name')
-        
-              # Debug prints
-              echo "REPO_NAME: $REPO_NAME"
-              echo "TEMPLATE_REPO: $TEMPLATE_REPO"
-        
-              # Create a new repository from the template
-              gh repo create "${ORG_NAME}/${REPO_NAME}" --private --template "${ORG_NAME}/${TEMPLATE_REPO}"
+          for repo in $(echo "$CONFIG_PATH" | jq -c '.repos[]'); do
+            echo "Processing repo: $repo"
+            REPO_NAME=$(echo $repo | jq -r '.repo_name')
+            TEMPLATE_REPO=$(echo $repo | jq -r '.template_name')
+      
+            # Debug prints
+            echo "REPO_NAME: $REPO_NAME"
+            echo "TEMPLATE_REPO: $TEMPLATE_REPO"
+      
+            # Create a new repository from the template
+            gh repo create "${ORG_NAME}/${REPO_NAME}" --private --template "${ORG_NAME}/${TEMPLATE_REPO}"
           done
-
