@@ -1,0 +1,17 @@
+name: Trigger Create Repositories
+
+on:
+  workflow_run:
+    workflows: ["Create Repositories"]
+    types:
+      - manual
+
+jobs:
+  trigger-create-repos:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Trigger Create Repositories
+        run: echo "Triggering Create Repositories"
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
