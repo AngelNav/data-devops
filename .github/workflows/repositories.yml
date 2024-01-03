@@ -1,10 +1,6 @@
 name: Create Repositories
 
 on:
-  workflow_run:
-    workflows: ["Trigger Create Repositories"]
-    types:
-      - manual
   workflow_dispatch:
 
 env:
