@@ -53,19 +53,5 @@ jobs:
 
             echo "Processing repo: $repo_name - Template: $template"
             # Create a new repository from the template
-            gh repo create "${ORG_NAME}/$repo_name" --private --template "${ORG_NAME}/$template_repo"
+            gh repo create "${ORG_NAME}/$repo_name" --private --template "${ORG_NAME}/$template"
           done
-
-          
-          # for repo in $(echo "$CONFIG_PATH" | jq -c '.repos[]'); do
-          #   echo "Processing repo: $repo"
-          #   REPO_NAME=$(echo $repo | jq -r '.repo_name')
-          #   TEMPLATE_REPO=$(echo $repo | jq -r '.template_name')
-      
-          #   # Debug prints
-          #   echo "REPO_NAME: $REPO_NAME"
-          #   echo "TEMPLATE_REPO: $TEMPLATE_REPO"
-      
-          #   # Create a new repository from the template
-          #   gh repo create "${ORG_NAME}/${REPO_NAME}" --private --template "${ORG_NAME}/${TEMPLATE_REPO}"
-          # done
