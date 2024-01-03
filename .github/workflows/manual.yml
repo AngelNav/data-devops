@@ -51,8 +51,9 @@ jobs:
             repo_name=$(echo "$repo_info" | cut -d ',' -f1)
             template=$(echo "$repo_info" | cut -d ',' -f2)
 
-            echo "Processing repo: $repo_name"
-            echo "Template: $template"
+            echo "Processing repo: $repo_name - Template: $template"
+            # Create a new repository from the template
+            gh repo create "${ORG_NAME}/${REPO_NAME}" --private --template "${ORG_NAME}/${TEMPLATE_REPO}"
           done
 
           
