@@ -4,7 +4,7 @@ on:
   workflow_run:
     workflows: ["Trigger Create Repositories"]
     types:
-      - completed
+      - manual
 
 env:
   PAT_TOKEN: ${{ secrets.PAT_TOKEN }}
