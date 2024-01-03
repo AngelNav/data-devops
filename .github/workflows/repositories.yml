@@ -1,7 +1,9 @@
 name: Create Repositories
 
 on:
-  workflow_dispatch:
+  push:
+    branches:
+      - main
 
 env:
   PAT_TOKEN: ${{ secrets.PAT_TOKEN }}
