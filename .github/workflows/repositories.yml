@@ -2,14 +2,10 @@ name: Create Repositories
 
 on:
   workflow_dispatch:
-    inputs:
-      config_path:
-        description: 'Path to the configuration file'
-        required: true
 
 env:
   PAT_TOKEN: ${{ secrets.PAT_TOKEN }}
-  CONFIG_PATH: ${{ github.event.inputs.config_path }}
+  CONFIG_PATH: "./repositories/templates.json"
 
 jobs:
   create-repos:
