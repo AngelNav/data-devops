@@ -37,7 +37,7 @@ jobs:
 
       - name: Create Repositories
         run: |
-          ORG_NAME="MGMResorts"
+          ORG_NAME="AngelNav"
 
           # Sign in to GitHub CLI with access token
           gh auth login --with-token <<<"$PAT_TOKEN"
