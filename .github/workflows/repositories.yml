@@ -1,9 +1,10 @@
 name: Create Repositories
 
 on:
-  push:
-    branches:
-      - main
+  workflow_run:
+    workflows: ["Trigger Create Repositories"]
+    types:
+      - completed
 
 env:
   PAT_TOKEN: ${{ secrets.PAT_TOKEN }}
